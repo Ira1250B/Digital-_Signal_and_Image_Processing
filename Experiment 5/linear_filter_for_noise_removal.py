@@ -1,0 +1,83 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Original Signal
+signal = np.array([1, 2, 3, 4, 5, 6, 7, 8])
+
+# FFT
+fft_result = np.fft.fft(signal)
+
+# Magnitude & Phase
+magnitude_spectrum = np.abs(fft_result)
+print("Magnitude Spectrum: ", magnitude_spectrum)
+phase_spectrum = np.angle(fft_result)
+print("Phase Spectrum: ", phase_spectrum)
+
+# IFFT
+reconstructed_signal = np.fft.ifft(fft_result)
+print("Reconstructed Signal: ", reconstructed_signal)
+
+plt.figure(figsize=(12, 10))
+
+# 1. Original Signal
+plt.subplot(3, 2, 1)
+plt.stem(signal)
+plt.title("Original Signal")
+plt.xlabel("Sample Index")
+plt.ylabel("Amplitude")
+plt.grid()
+
+# 2. Magnitude Spectrum
+plt.subplot(3, 2, 2)
+plt.stem(magnitude_spectrum)
+plt.title("Magnitude Spectrum")
+plt.xlabel("Frequency Index")
+plt.ylabel("Magnitude")
+plt.grid()
+
+# 3. Phase Spectrum
+plt.subplot(3, 2, 3)
+plt.stem(phase_spectrum)
+plt.title("Phase Spectrum")
+plt.xlabel("Frequency Index")
+plt.ylabel("Phase (Radians)")
+plt.grid()
+
+# 4. Complex FFT Signal
+x = np.arange(len(fft_result))
+
+plt.subplot(3, 2, 4)
+
+plt.stem(x, np.real(fft_result),
+         linefmt='b-', markerfmt='bo', basefmt=" ")
+
+plt.stem(x, np.imag(fft_result),
+         linefmt='r-', markerfmt='ro', basefmt=" ")
+
+for i in range(len(fft_result)):
+    plt.text(x[i], np.real(fft_result[i]) + 0.8,
+             f"{np.real(fft_result[i]):.1f}",
+             color='blue', ha='center', fontsize=8)
+
+    plt.text(x[i], np.imag(fft_result[i]) - 1.2,
+             f"{np.imag(fft_result[i]):.1f}",
+             color='red', ha='center', fontsize=8)
+
+plt.title("Complex FFT Signal")
+plt.xlabel("Frequency Index")
+plt.ylabel("Amplitude")
+plt.legend(["Real", "Imaginary"])
+plt.grid()
+
+# 5. Reconstructed Signal
+plt.subplot(3, 2, 5)
+plt.stem(np.real(reconstructed_signal))
+plt.title("Reconstructed Signal using IFFT")
+plt.xlabel("Sample Index")
+plt.ylabel("Amplitude")
+plt.grid()
+
+plt.tight_layout()
+plt.show()
+
+
